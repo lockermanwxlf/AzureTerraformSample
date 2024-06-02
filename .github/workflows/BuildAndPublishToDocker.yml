@@ -5,6 +5,7 @@ on:
             - main
         paths:
             - Api/**
+    workflow_dispatch:
 jobs:
     push_to_registry:
         name: Push Docker Image to Docker Hub
@@ -14,6 +15,11 @@ jobs:
         steps:
           - name: Check out the repo
             uses: actions/checkout@v4
+
+          - name: Pwd
+            run: |
+                pwd
+                ls
 
           - name: Log in to Docker
             uses: docker/login-action@v3
@@ -30,8 +36,8 @@ jobs:
           - name: Build and push to Docker
             uses: docker/build-push-action@v5
             with:
-                context: ./Api
-                file: Dockerfile
+                context: .
+                file: ./Api/Dockerfile
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
